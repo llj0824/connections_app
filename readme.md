@@ -11,6 +11,109 @@ The application will use a **React Native** front-end coupled with a **Next.js**
 For the initial development and beta testing phase, the app will run in a local environment:
 - **Local Deployment (Beta):** The Next.js backend will be hosted on `localhost` (the developer’s machine), typically on a port like 3000 (e.g., `http://localhost:3000`). The React Native app, when run on an emulator or device in development mode, will communicate with this local server for all API requests. Using localhost is ideal for internal testing because it allows rapid development without any network latency or internet requirements. In fact, *“localhost” points to your own computer and is useful to test a local development server* ([Running Your React Native Expo App on a Device with Local Backend - DEV Community](https://dev.to/katkelly/running-your-react-native-expo-app-on-a-device-with-local-backend-k8l#:~:text=,test%20a%20local%20development%20server)) – which is exactly our use case. We’ll ensure that developers can run the entire stack easily (perhaps with a single command that starts the Next.js dev server and the React Native packager). For testing on a physical device, we’ll use the machine’s IP address in the app config (since a phone can’t resolve `localhost` on the PC, we’ll replace it with the LAN IP).
 
+// ... existing code ...
+
+## Getting Started
+
+This guide will help you set up and run both the frontend and backend components of the application for local development.
+
+### Prerequisites
+
+- Node.js (v14 or later)
+- npm or yarn
+- For React Native development:
+  - Android Studio (for Android development)
+  - Xcode (for iOS development, Mac only)
+  - React Native CLI
+
+### Project Setup
+
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd <project-directory>
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+### Starting the Backend (Next.js)
+
+1. Navigate to the backend directory:
+   ```bash
+   cd packages/web
+   ```
+
+2. Start the Next.js development server:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+3. The backend server will be running at `http://localhost:3000`. You can verify it's working by visiting this URL in your browser.
+
+### Starting the Frontend (React Native)
+
+1. Open a new terminal window and navigate to the React Native directory:
+   ```bash
+   cd packages/mobile
+   ```
+
+2. Start the React Native development server:
+   ```bash
+   npm start
+   # or
+   yarn start
+   ```
+
+3. In another terminal window, run the app on your preferred platform:
+   
+   For iOS (Mac only):
+   ```bash
+   npm run ios
+   # or
+   yarn ios
+   ```
+   
+   For Android:
+   ```bash
+   npm run android
+   # or
+   yarn android
+   ```
+
+### Connecting Frontend to Backend
+
+When running in development mode, the React Native app needs to communicate with your local Next.js server:
+
+1. For emulators:
+   - Android emulator: The backend URL should be set to `http://10.0.2.2:3000`
+   - iOS simulator: The backend URL should be set to `http://localhost:3000`
+
+2. For physical devices on the same network:
+   - Find your computer's IP address (e.g., 192.168.1.100)
+   - Use `http://<your-ip-address>:3000` as the backend URL in the app
+
+### Testing the Connection
+
+1. Once both servers are running, the React Native app should be able to communicate with the Next.js backend.
+2. Navigate through the app to see if data is loading correctly.
+3. If you encounter connection issues, verify that:
+   - Both servers are running
+   - The correct IP address/port is being used
+   - Your device/emulator has network access to the development machine
+
+### Troubleshooting
+
+- If the app can't connect to the backend, check your firewall settings
+- Ensure the correct URL is configured in the React Native app
+- For physical devices, make sure your phone is on the same WiFi network as your development machine
+
 ## Core Components
 
 ### 1. User Profile Component
@@ -124,125 +227,3 @@ sequenceDiagram
     Database->>App: Updates host karma
     App->>User: Shows "Thank you" message
 ```
-
-## UI/UX Flows
-
-### 1. Onboarding Flow
-1. **Welcome Screen**
-   - App logo/branding
-   - Brief value proposition
-   - "Get Started" button
-
-2. **Personality Quiz**
-   - 5-7 brief questions
-   - Simple multiple-choice format
-   - Progress indicator
-   - Back/Next navigation
-
-3. **Profile Setup**
-   - Photo upload
-   - Name, bio fields
-   - Interest selection (tags)
-   - Age/basic demographic info
-
-4. **ID Verification**
-   - Placeholder for future verification
-   - Simple mock verification process
-
-5. **Preference Selection**
-   - Event types of interest
-   - Distance preferences
-   - Notification settings
-
-6. **Completion Screen**
-   - Success message
-   - Compatibility profile summary
-   - "Explore Events" button
-
-### 2. Event Discovery Flow
-1. **Event Listing**
-   - Featured events carousel
-   - Category filters (horizontal scroll)
-   - Event cards in vertical scroll
-   - Search bar
-   - "Create Event" floating button
-
-2. **Event Details**
-   - Hero image
-   - Title, date, location
-   - Host information with karma score
-   - Description
-   - Attendee preview (avatars)
-   - Map view
-   - Join/RSVP button
-   - Share/Invite button
-
-3. **Event Confirmation**
-   - Success animation
-   - Event added to calendar
-   - "View My Events" option
-   - "Invite Friends" option
-
-### 3. Event Creation Flow
-1. **Creation Form**
-   - Title input
-   - Date/time selector
-   - Location input/map
-   - Category selection
-   - Description field
-   - Image upload
-   - Attendee limit setting
-   - Public/Private toggle
-
-2. **Preview Screen**
-   - Event card preview
-   - Final review of details
-   - Edit option
-   - Publish button
-
-3. **Success Screen**
-   - Confirmation message
-   - View event option
-   - Share event option
-
-### 4. Social Interaction Flow
-1. **Event Chat**
-   - Group chat for event attendees
-   - Message composition
-   - User bubbles with compatibility indicators
-   - Ephemeral chat options (if applicable)
-
-2. **Profile Viewing**
-   - View attendee profiles from event page
-   - Compatibility score visualization
-   - Mutual interests highlighted
-   - Recent events attended
-   - Karma/reputation score
-
-3. **Post-Event**
-   - Review prompt
-   - Rating interface
-   - Optional comments
-   - Feedback on compatibility match accuracy
-
-### 5. Navigation Structure
-- **Bottom Tab Navigation**
-  - Events (home)
-  - My Schedule
-  - Chats
-  - Profile
-
-- **Events Tab Hierarchy**
-  - Main listing
-  - Filters/search
-  - Creation
-  - Detail views
-
-- **Profile Tab Hierarchy**
-  - User profile
-  - Edit options
-  - Settings
-  - Karma history
-  - Past events
-
-This simplified design document focuses on the core components, user flows, and interactions without diving into implementation details or complex rationales. It provides a clear blueprint for the initial development phase while allowing for iteration and expansion based on user feedback.

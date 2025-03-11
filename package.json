@@ -1,0 +1,13 @@
+{
+  "name": "connection-app-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "web": "yarn workspace web",
+    "mobile": "yarn workspace mobile",
+    "shared": "yarn workspace shared"
+  }
+} 

@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Connection App Backend
+
+This is the Next.js backend for the Connection App. It provides API endpoints for the mobile frontend.
 
 ## Getting Started
 
@@ -10,13 +12,73 @@ npm run dev
 yarn dev
 # or
 pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Available API Endpoints
+
+### Health Check
+- `GET /api/health` - Check if the API is running
+
+### User Profile
+- `GET /api/profile` - Get the current user's profile
+- `PUT /api/profile` - Update the current user's profile
+
+### Event Management
+- `GET /api/events` - Get a list of all events
+- `POST /api/events` - Create a new event
+- `GET /api/events/[id]` - Get details for a specific event
+- `POST /api/events/[id]/rsvp` - Join an event (RSVP)
+- `DELETE /api/events/[id]/rsvp` - Leave an event
+
+## Testing the API with cURL
+
+### Check API health:
+```bash
+curl http://localhost:3000/api/health
+```
+
+### Get user profile:
+```bash
+curl http://localhost:3000/api/profile
+```
+
+### Update user profile:
+```bash
+curl -X PUT -H "Content-Type: application/json" -d '{"name":"Updated User", "bio":"This is an updated bio"}' http://localhost:3000/api/profile
+```
+
+### Get all events:
+```bash
+curl http://localhost:3000/api/events
+```
+
+### Get a specific event:
+```bash
+curl http://localhost:3000/api/events/1
+```
+
+### Create a new event:
+```bash
+curl -X POST -H "Content-Type: application/json" -d '{"title":"New Event", "description":"This is a new event", "datetime":"2023-12-31T20:00:00Z", "location":"Virtual"}' http://localhost:3000/api/events
+```
+
+### Join an event (RSVP):
+```bash
+curl -X POST http://localhost:3000/api/events/1/rsvp
+```
+
+### Leave an event:
+```bash
+curl -X DELETE http://localhost:3000/api/events/1/rsvp
+```
+
+## Implementation Details
+
+The backend uses in-memory storage for simplicity. In a production environment, this would be replaced with a database.
+
+For authentication, we're currently using a simple mock implementation that always returns the default test user. In a real application, this would be replaced with JWT authentication.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 

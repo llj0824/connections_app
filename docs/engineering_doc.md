@@ -7,7 +7,7 @@ Great! I'll structure the engineering document as follows:
 5. **Interaction Flow & API Contracts** - How data moves through the system.
 6. **Deployment Guide (Localhost)** - Ensuring everything runs smoothly.
 
-I'll provide a modular engineering document so your team can pick up and implement pieces individually. I’ll let you know when it’s ready!
+I'll provide a modular engineering document so your team can pick up and implement pieces individually. I'll let you know when it's ready!
 
 # React Native + Next.js Monorepo Implementation Guide
 
@@ -67,9 +67,9 @@ This structure follows a typical Yarn workspaces monorepo layout ([React Native 
 
 - **`packages/web`:** Contains the Next.js application. This project serves as our **back-end** (via Next's API routes) and optionally the **web front-end**. The `pages/api/` folder (or `app/api/` in Next 13+ with the new App Router) includes route handlers that implement the backend logic for authentication, events, chat, etc. The Next.js app could also have regular pages (e.g. `pages/index.tsx` for a web dashboard) if a web interface is part of the product, but those are not the focus here. Configuration files like `next.config.js` or environment variables for the server reside in this folder. We remove duplicate dependencies in this project (like React) because they are hoisted to the root by the workspace, ensuring only one copy is used across mobile and web ([React Native + Next.js Monorepo – ecklf.com](https://ecklf.com/blog/rn-monorepo#:~:text=Since%20both%20of%20our%20packages,create%20more%20web%20packages%20later)).
 
-- **`packages/shared`:** (Optional) A place for shared modules, such as utility functions, custom hooks, constants, or even UI components that can be used by both React Native and Next.js (potentially through [React Native Web](https://necolas.github.io/react-native-web/) for web compatibility). For instance, a validation helper or a data format function could live here and be imported by both apps. This promotes DRY principles – “Don't Repeat Yourself” – by centralizing logic used in multiple places.
+- **`packages/shared`:** (Optional) A place for shared modules, such as utility functions, custom hooks, constants, or even UI components that can be used by both React Native and Next.js (potentially through [React Native Web](https://necolas.github.io/react-native-web/) for web compatibility). For instance, a validation helper or a data format function could live here and be imported by both apps. This promotes DRY principles – "Don't Repeat Yourself" – by centralizing logic used in multiple places.
 
-- **Hoisted `node_modules`:** Thanks to Yarn/NPM workspaces, dependencies are hoisted to the root `node_modules` when possible. This avoids duplication and ensures that both the mobile and web projects share the same version of packages like React. Monorepos allow sharing packages and managing dependencies more easily ([Setting up React Native Monorepo With Yarn Workspaces | {callstack}](https://www.callstack.com/blog/setting-up-react-native-monorepo-with-yarn-workspaces#:~:text=Thanks%20to%20react,the%20code%20can%20be%20shared)). (During setup, special configuration is needed so that React Native’s Metro bundler knows to look for modules in the hoisted location. This typically involves adjusting `metro.config.js` to include the root and using symlinks, which Yarn handles. The Callstack article provides guidance on Metro and native config adjustments in a monorepo ([Setting up React Native Monorepo With Yarn Workspaces | {callstack}](https://www.callstack.com/blog/setting-up-react-native-monorepo-with-yarn-workspaces#:~:text=In%20order%20for%20our%20app,due%20to%20package%20hoisting)) ([Setting up React Native Monorepo With Yarn Workspaces | {callstack}](https://www.callstack.com/blog/setting-up-react-native-monorepo-with-yarn-workspaces#:~:text=)).)
+- **Hoisted `node_modules`:** Thanks to Yarn/NPM workspaces, dependencies are hoisted to the root `node_modules` when possible. This avoids duplication and ensures that both the mobile and web projects share the same version of packages like React. Monorepos allow sharing packages and managing dependencies more easily ([Setting up React Native Monorepo With Yarn Workspaces | {callstack}](https://www.callstack.com/blog/setting-up-react-native-monorepo-with-yarn-workspaces#:~:text=Thanks%20to%20react,the%20code%20can%20be%20shared)). (During setup, special configuration is needed so that React Native's Metro bundler knows to look for modules in the hoisted location. This typically involves adjusting `metro.config.js` to include the root and using symlinks, which Yarn handles. The Callstack article provides guidance on Metro and native config adjustments in a monorepo ([Setting up React Native Monorepo With Yarn Workspaces | {callstack}](https://www.callstack.com/blog/setting-up-react-native-monorepo-with-yarn-workspaces#:~:text=In%20order%20for%20our%20app,due%20to%20package%20hoisting)) ([Setting up React Native Monorepo With Yarn Workspaces | {callstack}](https://www.callstack.com/blog/setting-up-react-native-monorepo-with-yarn-workspaces#:~:text=)).)
 
 **Development note:** Each app (mobile and web) has its own `package.json` with scripts. For example, the mobile app might have scripts like `"android"` or `"ios"` to run the app, while the web app has `"dev"` to start the Next.js dev server. Using a tool like Yarn workspaces or npm workspaces, you can run commands in each subproject from the root (e.g. `yarn workspace mobile run ios`). This structure allows front-end and back-end developers to work in isolation (in their respective folders) while still being in one repository.
 
@@ -99,6 +99,39 @@ Each component has a clear purpose. Reusable components are **presentational**: 
 We will use **React Hooks and Context API** for state management. Simpler, local state (e.g. the text in a form input, or whether a modal is visible) will be handled with `useState` inside components. For more complex logic or side effects (like fetching data when a screen loads), `useEffect` and custom hooks will be used. For example, we might create a custom hook `useEvents()` that fetches and returns a list of events, and use it inside `EventListScreen` to populate data. This follows React best practices for separating data fetching logic into hooks for reuse and clarity.
 
 In summary, the UI layer will be built of small, reusable components assembled within screen-level containers. The state management will use React hooks and context to keep the data flow predictable and aligned with React paradigms. This approach will make it easier to extend the app (e.g. adding a new screen or feature) without entangling unrelated parts of the app, and it lets multiple developers work concurrently on different UI pieces or features.
+
+## Backend Implementation Checkpoints
+
+### Checkpoint 1: Project Setup and Basic User Profile
+
+1. **Initialize the Next.js project** with TypeScript support.
+2. **Set up the project structure** with folders for API routes, utilities, and data models.
+3. **Implement simple in-memory data storage** for user profile and events.
+4. **Create a default user profile** that will be used throughout the app.
+5. **Create profile API endpoints**:
+   - `GET /api/profile` - For retrieving the user profile
+   - `PUT /api/profile` - For updating the user profile
+6. **Test the profile endpoints** using Postman or cURL.
+
+### Checkpoint 2: Event Management API
+
+1. **Create the event data model** with necessary fields.
+2. **Implement event list endpoint** (`GET /api/events`) to retrieve all events.
+3. **Add event detail endpoint** (`GET /api/events/[id]`) to get a specific event's details.
+4. **Create endpoint for event creation** (`POST /api/events`).
+5. **Implement the RSVP functionality** (`POST /api/events/[id]/rsvp`) to allow joining events.
+6. **Add CORS support** to allow cross-origin requests from the mobile app.
+7. **Test all event endpoints** to ensure they work as expected.
+
+### Checkpoint 3: Chat Functionality and Enhanced Features
+
+1. **Add basic chat functionality**:
+   - `GET /api/events/[id]/messages` - Get messages for an event
+   - `POST /api/events/[id]/messages` - Add a new message
+2. **Improve error handling** across all endpoints for better client feedback.
+3. **Add validation** to all input data to prevent invalid data from being processed.
+4. **Create a health check endpoint** (`GET /api/health`) to verify the API is running.
+5. **Document all API endpoints** for front-end developers.
 
 **Front-end (React Native):** 
 
@@ -132,7 +165,7 @@ In summary, the UI layer will be built of small, reusable components assembled w
    Here we handle both GET (list events) and POST (create event) in one file for brevity. In a real app, you might separate them or use Next 13 route handlers. The `createEvent` would add an event with a new ID and return it.
 
 3. **GET /api/events/[id]:** Create file `pages/api/events/[id].ts` to handle requests for a specific event (Next will pass `req.query.id`). For GET, find the event by ID and return it (`res.json({ event })`). If not found, return 404. For other methods: 
-   - You could allow PUT to update an event (checking that `req.user.id` matches the event’s organizerId).
+   - You could allow PUT to update an event (checking that `req.user.id` matches the event's organizerId).
    - Allow DELETE to remove an event (also with auth check).
    - Allow POST on a sub-route like `/api/events/[id]/rsvp` for join actions (or handle as part of this if logic with some indicator).
 
@@ -305,7 +338,7 @@ This section defines how data flows between the front-end and back-end for each 
 
 - **`POST /api/events/[id]/messages`:** Sends a new message in the event chat.  
   **Request:** JSON `{ "text": "Hello everyone!" }`. Auth required (user must be logged in; optionally check they're part of the event).  
-  **Response:** 201 Created with `{ "message": { "id": ..., "senderId": ..., "text": "...", "timestamp": "..." } }`. The returned message should reflect what was saved (it may generate an ID and timestamp on the server). This helps the client sync the message with what’s on server. If the text is empty or too long, 400 validation error. If not auth or not allowed, 401/403.  
+  **Response:** 201 Created with `{ "message": { "id": ..., "senderId": ..., "text": "...", "timestamp": "..." } }`. The returned message should reflect what was saved (it may generate an ID and timestamp on the server). This helps the client sync the message with what's on server. If the text is empty or too long, 400 validation error. If not auth or not allowed, 401/403.  
   **Flow:** Called when user sends a message. The RN app will also display the sent message immediately. On receiving the response, the app can confirm the message was delivered (maybe removing any "sending..." indicator on it). If the app is polling `GET /messages`, the new message will also appear there on next fetch, but since we already add it on client, it's fine.
 
 - **WebSocket Endpoint (future):** If implementing real-time, you might have an endpoint like `/api/events/[id]/socket` or use a library on the Next.js custom server to handle a WebSocket for live updates. Since the question focuses on endpoints, we stick to REST for now.
@@ -353,7 +386,7 @@ To run and test the application locally (both front-end and back-end), follow th
   ```  
   This compiles the Android app (using Gradle) and installs it on the emulator/device. If Metro is running, it will bundle the JavaScript and the app should start on the device.
 
-- **Configure API URL:** By default, our app code uses `http://localhost:3000` for the API. **Important:** For Android, `localhost` in the emulator context is the emulator itself, not your PC. Use the special IP `10.0.2.2` to reach the host machine’s localhost. One easy way is to define a constant in your app like:
+- **Configure API URL:** By default, our app code uses `http://localhost:3000` for the API. **Important:** For Android, `localhost` in the emulator context is the emulator itself, not your PC. Use the special IP `10.0.2.2` to reach the host machine's localhost. One easy way is to define a constant in your app like:
   ```js
   const API_BASE = Platform.OS === 'android' ? 'http://10.0.2.2:3000' : 'http://localhost:3000';
   ```

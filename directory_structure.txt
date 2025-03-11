@@ -34,13 +34,6 @@
 │   │       │       ├── EditProfileScreen.tsx
 │   │       │       └── ProfileScreen.tsx
 │   │       └── utils
-│   ├── packages
-│   │   └── mobile
-│   │       └── src
-│   │           └── screens
-│   │               ├── auth
-│   │               ├── events
-│   │               └── profile
 │   ├── shared
 │   └── web
 │       ├── README.md
@@ -83,4 +76,4 @@
 │       └── tsconfig.json
 └── readme.md
 
-34 directories, 50 files
+31 directories, 50 files

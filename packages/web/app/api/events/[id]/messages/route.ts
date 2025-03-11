@@ -9,7 +9,6 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  // Authenticate user
   const user = getCurrentUser();
   
   if (!user) {
@@ -23,28 +22,20 @@ export async function GET(
     return createErrorResponse(404, 'Event not found');
   }
   
-  // Optionally check if user is an event attendee for access control
+  // Check if the user is an attendee
   if (!event.attendees.includes(user.id)) {
     return createErrorResponse(403, 'You must be an attendee to view messages');
   }
   
-  // Get messages for this event
   const messages = findMessagesByEventId(eventId);
-  
-  // Sort messages by timestamp
-  const sortedMessages = [...messages].sort(
-    (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
-  );
-  
-  return createSuccessResponse({ messages: sortedMessages });
+  return createSuccessResponse({ messages });
 }
 
-// POST /api/events/[id]/messages - Add a new message to an event
+// POST /api/events/[id]/messages - Add a message to an event
 export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  // Authenticate user
   const user = getCurrentUser();
   
   if (!user) {
@@ -58,32 +49,26 @@ export async function POST(
     return createErrorResponse(404, 'Event not found');
   }
   
-  // Ensure user is an attendee
+  // Check if the user is an attendee
   if (!event.attendees.includes(user.id)) {
-    return createErrorResponse(403, 'You must be an attendee to send messages');
+    return createErrorResponse(403, 'You must be an attendee to post messages');
   }
   
   try {
     const body = await request.json();
     const { text } = body;
     
-    // Validate message text
     if (!text || typeof text !== 'string' || text.trim() === '') {
       return createErrorResponse(400, 'Message text is required');
     }
     
-    if (text.length > 500) {
-      return createErrorResponse(400, 'Message text is too long (max 500 characters)');
-    }
-    
-    // Add the message
-    const newMessage = addMessage({
+    const message = addMessage({
       eventId,
       senderId: user.id,
-      text: text.trim()
+      text: text.trim(),
     });
     
-    return createSuccessResponse({ message: newMessage }, 201);
+    return createSuccessResponse({ message });
   } catch (error) {
     return createErrorResponse(400, 'Invalid request body');
   }

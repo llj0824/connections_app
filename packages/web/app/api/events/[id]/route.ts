@@ -3,12 +3,11 @@ import { findEventById } from '@/src/models/event';
 import { createErrorResponse, createSuccessResponse, corsHeaders } from '@/src/utils/api';
 import { getCurrentUser } from '@/src/utils/auth';
 
-// GET /api/events/[id] - Get a specific event's details
+// GET /api/events/[id] - Get a specific event
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  // Authenticate user
   const user = getCurrentUser();
   
   if (!user) {

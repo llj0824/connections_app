@@ -32,6 +32,10 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - `POST /api/events/[id]/rsvp` - Join an event (RSVP)
 - `DELETE /api/events/[id]/rsvp` - Leave an event
 
+### Chat Functionality
+- `GET /api/events/[id]/messages` - Get all messages for an event
+- `POST /api/events/[id]/messages` - Add a new message to an event's chat
+
 ## Testing the API with cURL
 
 ### Check API health:
@@ -73,6 +77,37 @@ curl -X POST http://localhost:3000/api/events/1/rsvp
 ```bash
 curl -X DELETE http://localhost:3000/api/events/1/rsvp
 ```
+
+### Get messages for an event:
+```bash
+curl http://localhost:3000/api/events/1/messages
+```
+
+### Send a message in an event:
+```bash
+curl -X POST -H "Content-Type: application/json" -d '{"text":"Hello everyone!"}' http://localhost:3000/api/events/1/messages
+```
+
+## Error Handling
+
+The API uses standardized error responses with the following format:
+
+```json
+{
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Human-readable error message",
+    "details": {} // Optional additional details
+  }
+}
+```
+
+Common error codes include:
+- `UNAUTHORIZED` (401) - Authentication required
+- `FORBIDDEN` (403) - Permission denied
+- `NOT_FOUND` (404) - Resource not found
+- `BAD_REQUEST` (400) - Invalid request
+- `VALIDATION_ERROR` (400) - Input validation failed
 
 ## Implementation Details
 

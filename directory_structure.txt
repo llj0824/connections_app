@@ -1,0 +1,86 @@
+.
+├── directory_structure.txt
+├── docs
+│   ├── engineering_doc.md
+│   └── product_feature_doc.md
+├── package-lock.json
+├── package.json
+├── packages
+│   ├── mobile
+│   │   ├── app.json
+│   │   ├── index.js
+│   │   ├── package.json
+│   │   └── src
+│   │       ├── App.tsx
+│   │       ├── components
+│   │       ├── contexts
+│   │       │   └── AuthContext.tsx
+│   │       ├── navigation
+│   │       │   ├── AuthNavigator.tsx
+│   │       │   ├── EventsNavigator.tsx
+│   │       │   ├── MainNavigator.tsx
+│   │       │   ├── ProfileNavigator.tsx
+│   │       │   └── RootNavigator.tsx
+│   │       ├── screens
+│   │       │   ├── auth
+│   │       │   │   ├── LoginScreen.tsx
+│   │       │   │   └── SignupScreen.tsx
+│   │       │   ├── events
+│   │       │   │   ├── CreateEventScreen.tsx
+│   │       │   │   ├── EventChatScreen.tsx
+│   │       │   │   ├── EventDetailScreen.tsx
+│   │       │   │   └── EventListScreen.tsx
+│   │       │   └── profile
+│   │       │       ├── EditProfileScreen.tsx
+│   │       │       └── ProfileScreen.tsx
+│   │       └── utils
+│   ├── packages
+│   │   └── mobile
+│   │       └── src
+│   │           └── screens
+│   │               ├── auth
+│   │               ├── events
+│   │               └── profile
+│   ├── shared
+│   └── web
+│       ├── README.md
+│       ├── app
+│       │   ├── api
+│       │   │   ├── events
+│       │   │   │   ├── [id]
+│       │   │   │   │   ├── messages
+│       │   │   │   │   │   └── route.ts
+│       │   │   │   │   ├── route.ts
+│       │   │   │   │   └── rsvp
+│       │   │   │   │       └── route.ts
+│       │   │   │   └── route.ts
+│       │   │   ├── health
+│       │   │   │   └── route.ts
+│       │   │   └── profile
+│       │   │       └── route.ts
+│       │   ├── favicon.ico
+│       │   ├── globals.css
+│       │   ├── layout.tsx
+│       │   └── page.tsx
+│       ├── next-env.d.ts
+│       ├── next.config.ts
+│       ├── package.json
+│       ├── postcss.config.mjs
+│       ├── public
+│       │   ├── file.svg
+│       │   ├── globe.svg
+│       │   ├── next.svg
+│       │   ├── vercel.svg
+│       │   └── window.svg
+│       ├── src
+│       │   ├── models
+│       │   │   ├── event.ts
+│       │   │   ├── message.ts
+│       │   │   └── user.ts
+│       │   └── utils
+│       │       ├── api.ts
+│       │       └── auth.ts
+│       └── tsconfig.json
+└── readme.md
+
+34 directories, 50 files
